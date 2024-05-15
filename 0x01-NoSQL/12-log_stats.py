@@ -29,7 +29,12 @@ def nginx_stats(mongo_collection):
     print("{} status check".format(num_status_check))
 
 
-if __name__ == "__main__":
+def run():
     client = MongoClient("mongodb://127.0.0.1:27017")
     nginx_collection = client.logs.nginx
     nginx_stats(nginx_collection)
+
+
+if __name__ == "__main__":
+    """Driver function"""
+    run()
