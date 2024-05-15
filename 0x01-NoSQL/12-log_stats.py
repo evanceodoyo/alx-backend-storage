@@ -5,11 +5,6 @@ Module to prints Nginx logs in a MongoDB
 from pymongo import MongoClient
 
 
-def method_counter(mongo_collection, method):
-    "Counts the number of occurences of a given method in a collection."
-    return mongo_collection.count_documents({"method": method})
-
-
 def nginx_stats(mongo_collection):
     """
     Function to provide stats about Nginx logs stored in MongoDB.
@@ -25,7 +20,7 @@ def nginx_stats(mongo_collection):
     for method in methods:
         print("\tmethod {}: {}".format(
             method,
-            method_counter(mongo_collection, method))
+            mongo_collection.count_documents({"method": method}))
         )
     print("{} status check".format(num_status_check))
 
