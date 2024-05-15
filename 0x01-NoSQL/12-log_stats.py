@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+Module to prints Nginx logs in a MongoDB
 """
 from pymongo import MongoClient
 
