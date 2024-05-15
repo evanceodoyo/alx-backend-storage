@@ -40,6 +40,7 @@ def print_top_ips(mongo_collection):
             },
         ]
     )
+    print("IPs:")
     for res in results:
         ip = res['_id']
         requests_count = res['totalRequests']
