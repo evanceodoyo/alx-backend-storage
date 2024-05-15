@@ -13,7 +13,3 @@ def list_all(mongo_collection):
         return []
 
     return mongo_collection.find()
-
-
-if __name__ == "__main__":
-    list_all()
