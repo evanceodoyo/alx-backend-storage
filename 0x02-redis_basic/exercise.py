@@ -80,3 +80,16 @@ class Cache:
         Retrieve as int.
         """
         return self.get(key, fn=int)
+
+
+def replay(fn: Callable) -> None:
+    method_name = fn.__qualname__
+    input_key = f"{method_name}:inputs"
+    output_key = f"{method_name}:outputs"
+    inputs = cache._redis.lrange(input_key, 0, -1)
+    outputs = cache._redis.lrange(output_key, 0, -1)
+    print(f"{method_name} was called {len(inputs)} times:")
+    for i in range(len(inputs)):
+        input_args = inputs[i].decode('utf-8')
+        output_result = outputs[i].decode('utf-8')
+        print(f"{method_name}(*{input_args}) -> {output_result}")
