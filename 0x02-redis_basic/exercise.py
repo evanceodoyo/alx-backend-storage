@@ -4,7 +4,7 @@ Writing strings to redis.
 """
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable
 
 
 class Cache:
@@ -25,3 +25,26 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
+
+    def get(self, key: str, fn: Callable = None) -> Union[
+            str, int, bytes, float]:
+        """"
+        Returns value associated with the given key.
+        """
+        if self._redis.exists(key):
+            if fn:
+                return fn(self._redis.get(key))
+            return self._redis.get(key)
+        return None
+
+    def get_str(self, key: str) -> str:
+        """
+        Retrieve as a str.
+        """
+        return self.get(key, fn=lambda d: d.decode("utf-8"))
+
+    def get_int(self, key: str) -> int:
+        """
+        Retrieve as int.
+        """
+        return self.get(key, fn=int)
