@@ -4,7 +4,7 @@ Writing strings to redis.
 """
 import redis
 import uuid
-from functoools import wraps
+from functools import wraps
 from typing import Union, Callable
 
 
