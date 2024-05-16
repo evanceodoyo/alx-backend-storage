@@ -83,6 +83,9 @@ class Cache:
 
 
 def replay(fn: Callable) -> None:
+    """
+    Display the history of calls of a particular function.
+    """
     r_store = getattr(fn.__self__, '_redis', None)
     method_name = fn.__qualname__
     input_key = f"{method_name}:inputs"
@@ -90,7 +93,5 @@ def replay(fn: Callable) -> None:
     inputs = r_store.lrange(input_key, 0, -1)
     outputs = r_store.lrange(output_key, 0, -1)
     print(f"{method_name} was called {len(inputs)} times:")
-    for i in range(len(inputs)):
-        input_args = inputs[i].decode('utf-8')
-        output_result = outputs[i].decode('utf-8')
-        print(f"{method_name}(*{input_args}) -> {output_result}")
+    for fn_input, fn_output in zip(inputs, outputs):
+        print(f"{method_name}(*{fn_input.decode('utf-8')}) -> {fn_output}")
