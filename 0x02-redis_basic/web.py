@@ -6,6 +6,7 @@ import redis
 import requests
 from functools import wraps
 from typing import Callable
+from datetime import timedelta
 
 
 r = redis.Redis()
@@ -20,11 +21,11 @@ def cacher(fn: Callable) -> Callable:
         """Wrapper function"""
         r.incr(f"count:{url}")
         result = r.get(f"result:{url}")
-        if result:
+        if result is not None:
             return result.decode("utf-8")
         result = fn(url)
         r.set(f"count:{url}", 0)
-        r.setex(f"result:{url}", 10, result)
+        r.setex(f"result:{url}", timedelta(seconds=10), value=result)
         return result
     return wrapper
 
