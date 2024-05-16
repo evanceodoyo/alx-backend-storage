@@ -24,7 +24,6 @@ def cacher(fn: Callable) -> Callable:
         if result is not None:
             return result.decode("utf-8")
         result = fn(url)
-        r.set(f"count:{url}", 0)
         r.setex(f"result:{url}", timedelta(seconds=10), value=result)
         return result
     return wrapper
