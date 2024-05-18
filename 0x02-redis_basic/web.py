@@ -19,12 +19,13 @@ def cacher(fn: Callable) -> Callable:
     @wraps(fn)
     def wrapper(url: str) -> str:
         """Wrapper function"""
+        cache_key = f"result:{url}"
         r.incr(f"count:{url}")
-        result = r.get(f"result:{url}")
+        result = r.get(cache_key)
         if result is not None:
             return result.decode("utf-8")
         result = fn(url)
-        r.setex(f"result:{url}", timedelta(seconds=10), value=result)
+        r.setex(cache_key, timedelta(seconds=10), value=result)
         return result
     return wrapper
 
